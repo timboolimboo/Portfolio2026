@@ -17,6 +17,7 @@ const site = {
     timezone: "Europe/Berlin",
     locale: "de-DE",
     email: "contact@hellotim.work",
+    headerNote: "Kurztext für die Kopfzeile folgt.",
     url: "https://hellotim.work",
     sameAs: [
       "https://www.linkedin.com/in/tim-kattenbusch-107b5a122",
@@ -347,16 +348,22 @@ const site = {
   })),
 
   /**
-   * Keine offiziellen Kundenlogos. Nur typografische Platzhalter
-   * für die auf hellotim.work genannten Praktikumskunden.
+   * Keine offiziellen Logos. Nur gesetzte Wortmarken.
+   * uncertain: der Name stammt aus einem Projekt, nicht aus der
+   * Kundenliste des Praktikums — auf der Seite als Platzhalter markiert.
    */
   clients: [
     { name: "LG" },
     { name: "Asus" },
     { name: "Trilux" },
+    { name: "BMW", uncertain: true },
+    { name: "Promiflash", uncertain: true },
+    { name: "Passpoints", uncertain: true },
+    { name: "Frames", uncertain: true },
+    { name: "Medivital", uncertain: true },
   ],
   clientsNote:
-    "Platzhalter-Wortmarken für Kunden aus dem Agenturpraktikum — keine offiziellen Logos.",
+    "Typografische Wortmarken, keine offiziellen Logos. Platzhalter: bei BMW, Promiflash, Passpoints, Frames und Medivital ist auf hellotim.work ein Projekt genannt, nicht ausdrücklich ein Auftraggeber.",
 
   contact: {
     headlineBefore: "Kontakt, Zusammenarbeit",
@@ -462,6 +469,8 @@ const site = {
     nextProject: "Nächstes Projekt",
     viewProject: "Ansehen →",
     goalsLabel: "Ziele",
+    introLabel: "Projekt",
+    clientsLabel: "Clients",
     year: "Jahr",
     role: "Rolle",
     type: "Art",

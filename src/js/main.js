@@ -77,28 +77,6 @@ function stickyHeader() {
   window.addEventListener("scroll", onScroll, { passive: true });
 }
 
-function localClock() {
-  const node = document.getElementById("local-clock");
-  if (!node) return;
-  const { timezone, locale, location } = document.body.dataset;
-  const render = () => {
-    const now = new Date();
-    const date = new Intl.DateTimeFormat(locale || "de-DE", {
-      day: "2-digit",
-      month: "short",
-      timeZone: timezone || "Europe/Berlin",
-    }).format(now);
-    const time = new Intl.DateTimeFormat(locale || "de-DE", {
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: timezone || "Europe/Berlin",
-    }).format(now);
-    node.textContent = `${date} — ${time} ${location || ""}`.trim();
-  };
-  render();
-  window.setInterval(render, 30000);
-}
-
 function smoothHashLinks() {
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -229,6 +207,5 @@ function lightbox() {
 
 animateIn();
 stickyHeader();
-localClock();
 smoothHashLinks();
 lightbox();

@@ -112,7 +112,7 @@ function headerHtml(activeHref) {
   <div class="wrap header-grid">
     <div class="brand-block">
       <p class="brand">${esc(site.person.brand)}</p>
-      <p class="brand-meta" id="local-clock">— ${esc(site.person.location)}</p>
+      <p class="brand-meta"><span class="ph-tag">Platzhalter</span> ${esc(site.person.headerNote)}</p>
     </div>
     <div class="header-nav">${nav}</div>
   </div>
@@ -154,6 +154,29 @@ function footerHtml() {
     ${prepared}
   </div>
 </footer>`;
+}
+
+function clientsGridHtml() {
+  const cells = site.clients
+    .map((client) => {
+      const mark = client.uncertain
+        ? `<span class="ph-tag">Platzhalter</span>`
+        : "";
+      return `<div class="client-cell">
+        <span class="client-word" role="img" aria-label="${esc(client.name)}, Wortmarke, keine offizielle Logo-Datei">${esc(client.name)}</span>
+        ${mark}
+      </div>`;
+    })
+    .join("");
+  return `<section class="band band-tight" aria-label="${esc(site.ui.clientsLabel)}">
+  <div class="wrap split">
+    <p class="label">${esc(site.ui.clientsLabel)}</p>
+    <div>
+      <div class="client-grid">${cells}</div>
+      <p class="clients-note">${esc(site.clientsNote)}</p>
+    </div>
+  </div>
+</section>`;
 }
 
 function clientsHtml() {
@@ -218,7 +241,7 @@ function pageShell({ title, description, active, main }) {
   <script>document.documentElement.classList.add("js")</script>
   <script type="application/ld+json">${JSON.stringify(schema)}</script>
 </head>
-<body data-timezone="${esc(site.person.timezone)}" data-locale="${esc(site.person.locale)}" data-location="${esc(site.person.location)}">
+<body>
 ${headerHtml(active)}
 <main id="inhalt">
 ${main}
@@ -349,7 +372,7 @@ function aboutPage() {
     <div class="jobs">${jobs}</div>
   </div>
 </section>
-${clientsHtml()}`;
+${clientsGridHtml()}`;
 
   return pageShell({
     title: site.about.title,
@@ -420,33 +443,32 @@ function casePage(project, next) {
     )
     .join("");
 
+  const caseImage = (image) =>
+    image
+      ? reveal(
+          `<section class="case-media"><div class="wrap">${frameImage(image, { ratio: "16/9", fit: "contain" })}</div></section>`,
+        )
+      : "";
+  const caseText = (label, paragraphs) => `<section class="band band-tight case-block">
+  <div class="wrap split">
+    <p class="label">${esc(label)}</p>
+    ${reveal(`<div class="stack prose-md">${proseParagraphs(paragraphs)}</div>`)}
+  </div>
+</section>`;
+
   const main = `<section class="case-top">
-  <div class="wrap split">
-    <div class="desktop-only"></div>
-    <div>
+  <div class="wrap">
+    <div class="split">
+      <div class="desktop-only"></div>
       ${letterHeading("h1", "display", [{ text: project.title, tone: "ink" }])}
-      <div class="meta-row">${metaHtml}</div>
     </div>
+    <div class="meta-row">${metaHtml}</div>
   </div>
 </section>
-${reveal(`<section class="case-media"><div class="wrap">${frameImage(hero, { ratio: "16/9", fit: "contain" })}</div></section>`)}
-<section class="case-copy">
-  <div class="wrap split">
-    <div></div>
-    ${reveal(`<div class="stack prose-md">${proseParagraphs(project.intro)}</div>`)}
-  </div>
-</section>
-${
-  second
-    ? reveal(`<section class="case-media"><div class="wrap">${frameImage(second, { ratio: "16/9", fit: "contain" })}</div></section>`)
-    : ""
-}
-<section class="band band-tight">
-  <div class="wrap split">
-    <p class="label">${esc(site.ui.goalsLabel)}</p>
-    ${reveal(`<div class="stack prose-md">${proseParagraphs(project.goals)}</div>`)}
-  </div>
-</section>
+${caseImage(hero)}
+${caseText(site.ui.introLabel, project.intro)}
+${caseImage(second)}
+${caseText(site.ui.goalsLabel, project.goals)}
 ${
   grid
     ? reveal(`<section class="case-grid-section"><div class="wrap case-grid">${grid}</div></section>`)
