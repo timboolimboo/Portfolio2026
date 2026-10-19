@@ -5,6 +5,31 @@ import site from "../src/data/site.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
+/** '/' for Dokploy and local builds. The Pages workflow sets BASE_PATH=/Portfolio2026/. */
+export function siteBase() {
+  const raw = (process.env.BASE_PATH || "/").trim() || "/";
+  if (raw === "/") return "/";
+  const withSlash = raw.startsWith("/") ? raw : `/${raw}`;
+  return withSlash.endsWith("/") ? withSlash : `${withSlash}/`;
+}
+
+function pageHref(path) {
+  if (!path || path.startsWith("#") || path.startsWith("mailto:") || path.startsWith("http")) return path;
+  const base = siteBase();
+  if (path === "/") return base;
+  const clean = path.replace(/^\//, "").replace(/\/$/, "");
+  if (base === "/") return `/${clean}`;
+  return `${base}${clean}/`;
+}
+
+function assetHref(path) {
+  if (!path || path.startsWith("data:") || path.startsWith("http")) return path;
+  const base = siteBase();
+  const clean = path.startsWith("/") ? path.slice(1) : path;
+  if (base === "/") return `/${clean}`;
+  return `${base}${clean}`;
+}
+
 const esc = (value) =>
   String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
 
@@ -40,7 +65,7 @@ function frameImage(image, { ratio = "16/9", fit = "contain", eager = false } = 
   if (image.placeholder) {
     return `<div class="frame" style="--ratio:${ratio}">${placeholder(image.label, image.alt, "ph-fill")}</div>`;
   }
-  return `<div class="frame" style="--ratio:${ratio}"><img src="${esc(image.src)}" alt="${esc(image.alt)}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} class="fit-${fit}"></div>`;
+  return `<div class="frame" style="--ratio:${ratio}"><img src="${esc(assetHref(image.src))}" alt="${esc(image.alt)}"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} class="fit-${fit}"></div>`;
 }
 
 function proseParagraphs(items) {
@@ -74,7 +99,7 @@ function navHtml(activeHref) {
   const links = items
     .map((item) => {
       const current = item.href === activeHref;
-      return `<a href="${esc(item.href)}"${current ? ' aria-current="page" class="is-active"' : ""}>${esc(item.label)}</a>`;
+      return `<a href="${esc(pageHref(item.href))}"${current ? ' aria-current="page" class="is-active"' : ""}>${esc(item.label)}</a>`;
     })
     .join("");
   return `<nav aria-label="Hauptnavigation" class="nav">${links}</nav>`;
@@ -110,7 +135,7 @@ function footerHtml() {
   const prepared = site.preparedSections
     .map((section) => {
       if (section.enabled) {
-        return `<a href="${esc(section.href)}">${esc(section.label)}</a>`;
+        return `<a href="${esc(pageHref(section.href))}">${esc(section.label)}</a>`;
       }
       return `<span>${esc(section.label)} — deaktiviert</span>`;
     })
@@ -125,7 +150,7 @@ function footerHtml() {
     <div class="footer-links">${socials}</div>
   </div>
   <div class="wrap footer-meta">
-    <a href="/impressum">${esc(site.ui.impressum)}</a>
+    <a href="${esc(pageHref("/impressum"))}">${esc(site.ui.impressum)}</a>
     ${prepared}
   </div>
 </footer>`;
@@ -148,8 +173,8 @@ function clientsHtml() {
 }
 
 function projectCard(project) {
-  return `<a class="card" href="/arbeiten/${esc(project.slug)}">
-    <div class="frame frame-poster"><img src="${esc(project.cover)}" alt="${esc(project.title)}" loading="lazy" class="fit-cover"></div>
+  return `<a class="card" href="${esc(pageHref(`/arbeiten/${project.slug}`))}">
+    <div class="frame frame-poster"><img src="${esc(assetHref(project.cover))}" alt="${esc(project.title)}" loading="lazy" class="fit-cover"></div>
     <p class="card-title">${esc(project.title)}</p>
     <p class="card-meta">${esc(project.summary)}</p>
   </a>`;
@@ -188,7 +213,7 @@ function pageShell({ title, description, active, main }) {
   <meta property="og:description" content="${esc(desc)}">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="de_DE">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="${esc(assetHref("/favicon.svg"))}" type="image/svg+xml">
   <link rel="stylesheet" href="/src/styles/main.css">
   <script>document.documentElement.classList.add("js")</script>
   <script type="application/ld+json">${JSON.stringify(schema)}</script>
@@ -248,7 +273,7 @@ function homePage() {
 <section class="band">
   <div class="wrap split">
     <p class="label">${esc(site.home.info.label)}</p>
-    ${reveal(`<div><p class="prose-md">${esc(site.home.info.text)}</p><a class="quiet-link" href="${esc(site.home.info.moreHref)}">${esc(site.home.info.moreLabel)}</a></div>`)}
+    ${reveal(`<div><p class="prose-md">${esc(site.home.info.text)}</p><a class="quiet-link" href="${esc(pageHref(site.home.info.moreHref))}">${esc(site.home.info.moreLabel)}</a></div>`)}
   </div>
 </section>
 <section class="band">
@@ -263,7 +288,7 @@ function homePage() {
       <p class="label">${esc(site.home.work.label)}</p>
       <div>
         <p class="prose-sm">${esc(site.home.work.text)}</p>
-        <a class="quiet-link" href="${esc(site.home.work.moreHref)}">${esc(site.home.work.moreLabel)}</a>
+        <a class="quiet-link" href="${esc(pageHref(site.home.work.moreHref))}">${esc(site.home.work.moreLabel)}</a>
       </div>
     </div>`)}
     <div class="home-work">
@@ -391,7 +416,7 @@ function casePage(project, next) {
   const grid = rest
     .map(
       (image) =>
-        `<div class="frame" style="--ratio:16/9"><img src="${esc(image.src)}" alt="${esc(image.alt)}" loading="lazy" class="fit-contain"></div>`,
+        `<div class="frame" style="--ratio:16/9"><img src="${esc(assetHref(image.src))}" alt="${esc(image.alt)}" loading="lazy" class="fit-contain"></div>`,
     )
     .join("");
 
@@ -427,7 +452,7 @@ ${
     ? reveal(`<section class="case-grid-section"><div class="wrap case-grid">${grid}</div></section>`)
     : ""
 }
-<a class="next-project" href="/arbeiten/${esc(next.slug)}">
+<a class="next-project" href="${esc(pageHref(`/arbeiten/${next.slug}`))}">
   <div class="wrap next-row">
     <div>
       <p class="meta-label">${esc(site.ui.nextProject)}</p>

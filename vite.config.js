@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import { renderSite } from "./scripts/render.mjs";
+import { renderSite, siteBase } from "./scripts/render.mjs";
 
 function rewriteCleanUrl(req) {
   const raw = req.url || "/";
@@ -22,7 +22,7 @@ function rewriteCleanUrl(req) {
 const pages = renderSite();
 
 export default defineConfig({
-  base: "/",
+  base: siteBase(),
   plugins: [
     {
       name: "clean-urls",
