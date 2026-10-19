@@ -131,42 +131,30 @@ function footerHtml() {
 </footer>`;
 }
 
+function clientImg(client, className) {
+  const scale = Number(client.scale) > 0 ? client.scale : 1;
+  return `<img class="${className}" src="${esc(assetHref(client.src))}" alt="${esc(client.name)}" width="${Number(client.width)}" height="${Number(client.height)}" style="--logo-scale:${scale}" loading="lazy" decoding="async">`;
+}
+
 function clientsGridHtml() {
   const cells = site.clients
-    .map((client) => {
-      const mark = client.uncertain
-        ? `<span class="ph-tag">Platzhalter</span>`
-        : "";
-      return `<div class="client-cell">
-        <span class="client-word" role="img" aria-label="${esc(client.name)}, Wortmarke, keine offizielle Logo-Datei">${esc(client.name)}</span>
-        ${mark}
-      </div>`;
-    })
+    .map((client) => `<div class="client-cell">${clientImg(client, "client-logo")}</div>`)
     .join("");
   return `<section class="band band-tight" aria-label="${esc(site.ui.clientsLabel)}">
   <div class="wrap split">
     <p class="label">${esc(site.ui.clientsLabel)}</p>
-    <div>
-      <div class="client-grid">${cells}</div>
-      <p class="clients-note">${esc(site.clientsNote)}</p>
-    </div>
+    <div class="client-grid">${cells}</div>
   </div>
 </section>`;
 }
 
 function clientsHtml() {
-  const once = site.clients
-    .map(
-      (client) =>
-        `<span class="wordmark" role="img" aria-label="${esc(client.name)}, ${esc(site.clientsNote)}">${esc(client.name)}</span>`,
-    )
-    .join("");
-  const half = once.repeat(8);
-  return `<section class="band band-marquee" aria-label="Kunden">
+  const once = site.clients.map((client) => clientImg(client, "marquee-logo")).join("");
+  const half = once.repeat(2);
+  return `<section class="band band-marquee" aria-label="${esc(site.ui.clientsLabel)}">
   <div class="marquee-mask">
     <div class="marquee-track">${half}${half}</div>
   </div>
-  <p class="wrap clients-note">${esc(site.clientsNote)}</p>
 </section>`;
 }
 
