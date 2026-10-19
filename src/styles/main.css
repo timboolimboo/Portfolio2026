@@ -511,63 +511,52 @@ h3 {
   display: flex;
   align-items: center;
   width: max-content;
-  gap: 1.25rem;
-  animation: marquee 45s linear infinite;
+  gap: clamp(2.25rem, 4vw, 4.5rem);
+  animation: marquee 55s linear infinite;
 }
 
 .marquee-mask:hover .marquee-track {
   animation-play-state: paused;
 }
 
-.wordmark {
-  display: grid;
-  place-items: center;
-  height: 3rem;
-  padding-inline: 0.75rem;
-  color: var(--ink);
-  font-size: 1.35rem;
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  white-space: nowrap;
+.marquee-logo,
+.client-logo {
+  --logo-scale: 1;
+  display: block;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: left center;
 }
 
-.clients-note {
-  margin-top: 1.25rem;
-  max-width: 46rem;
-  color: var(--gray-400);
-  font-size: var(--xs);
+.marquee-logo {
+  height: calc(1.15rem * var(--logo-scale));
+  max-width: none;
 }
 
 .client-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 1rem;
-  row-gap: 0.25rem;
+  column-gap: 1.25rem;
+  row-gap: 0.35rem;
 }
 
 .client-cell {
-  container-type: inline-size;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0.35rem;
-  min-height: 3.75rem;
+  align-items: center;
+  justify-content: flex-start;
+  height: 4.25rem;
 }
 
-.client-word {
-  display: block;
-  max-width: 100%;
-  color: var(--ink);
-  font-size: clamp(0.85rem, 18cqi, 1.85rem);
-  font-weight: 500;
-  letter-spacing: -0.045em;
-  line-height: 1;
-  white-space: nowrap;
+.client-logo {
+  max-height: calc(1.65rem * var(--logo-scale));
+  max-width: min(92%, calc(8.75rem * var(--logo-scale)));
+  transition: opacity 0.2s linear;
 }
 
-.client-cell .ph-tag {
-  margin-right: 0;
+.client-cell:hover .client-logo,
+.client-cell:focus-within .client-logo {
+  opacity: 0.55;
 }
 
 @keyframes marquee {
@@ -992,11 +981,20 @@ p.is-placeholder {
 
   .client-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    column-gap: 1.5rem;
+    column-gap: clamp(1.25rem, 2vw, 2.25rem);
   }
 
   .client-cell {
-    min-height: 5rem;
+    height: clamp(5.5rem, 6vw, 7.25rem);
+  }
+
+  .client-logo {
+    max-height: calc(clamp(2.05rem, 1.55vw, 2.65rem) * var(--logo-scale));
+    max-width: min(94%, calc(clamp(10rem, 8vw, 14rem) * var(--logo-scale)));
+  }
+
+  .marquee-logo {
+    height: calc(1.45rem * var(--logo-scale));
   }
 
   .label {
@@ -1030,11 +1028,6 @@ p.is-placeholder {
 
   .desktop-only {
     display: block;
-  }
-
-  .wordmark {
-    height: 5rem;
-    font-size: 2rem;
   }
 
   .footer-mail-full {
@@ -1091,6 +1084,7 @@ p.is-placeholder {
   }
 
   .marquee-track,
+  .client-logo,
   .icon-ux circle,
   .icon-ui rect,
   .icon-digital rect,

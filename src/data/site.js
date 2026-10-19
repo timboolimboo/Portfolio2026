@@ -348,22 +348,27 @@ const site = {
   })),
 
   /**
-   * Keine offiziellen Logos. Nur gesetzte Wortmarken.
-   * uncertain: der Name stammt aus einem Projekt, nicht aus der
-   * Kundenliste des Praktikums — auf der Seite als Platzhalter markiert.
+   * Freigegebene Kundenlogos (schwarze SVGs).
+   * scale ist die optische Korrektur gegen die Basis aus max-height
+   * und max-width. Höhere Zeichen (Rundlogo, Stern, Wort plus Claim)
+   * stehen über 1, damit sie neben den breiten Wortmarken gleich groß wirken.
    */
   clients: [
-    { name: "LG" },
-    { name: "Asus" },
-    { name: "Trilux" },
-    { name: "BMW", uncertain: true },
-    { name: "Promiflash", uncertain: true },
-    { name: "Passpoints", uncertain: true },
-    { name: "Frames", uncertain: true },
-    { name: "Medivital", uncertain: true },
+    { name: "BMW", src: "/images/clients/bmw.svg", width: 100, height: 100, scale: 1.42 },
+    { name: "Mercedes-Benz", src: "/images/clients/mercedes-benz.svg", width: 149, height: 100, scale: 1.78 },
+    { name: "E.ON", src: "/images/clients/eon.svg", width: 322, height: 100, scale: 0.96 },
+    { name: "Euroclear", src: "/images/clients/euroclear.svg", width: 104, height: 100, scale: 1.55 },
+    { name: "DKB", src: "/images/clients/dkb.svg", width: 196, height: 100, scale: 1.3 },
+    { name: "Asus", src: "/images/clients/asus.svg", width: 483, height: 100, scale: 1 },
+    { name: "LG", src: "/images/clients/lg.svg", width: 227, height: 100, scale: 1.1 },
+    { name: "Trilux", src: "/images/clients/trilux.svg", width: 397, height: 100, scale: 1.28 },
+    { name: "Promiflash", src: "/images/clients/promiflash.svg", width: 536, height: 100, scale: 0.96 },
+    { name: "JTI", src: "/images/clients/jti.svg", width: 134, height: 100, scale: 1.24 },
+    { name: "METRO", src: "/images/clients/metro.svg", width: 591, height: 100, scale: 1.04 },
+    { name: "Takeda", src: "/images/clients/takeda.svg", width: 299, height: 100, scale: 1.12 },
+    { name: "Novartis", src: "/images/clients/novartis.svg", width: 664, height: 100, scale: 1.06 },
+    { name: "Rytle", src: "/images/clients/rytle.svg", width: 157, height: 100, scale: 1.62 },
   ],
-  clientsNote:
-    "Typografische Wortmarken, keine offiziellen Logos. Platzhalter: bei BMW, Promiflash, Passpoints, Frames und Medivital ist auf hellotim.work ein Projekt genannt, nicht ausdrücklich ein Auftraggeber.",
 
   contact: {
     headlineBefore: "Kontakt, Zusammenarbeit",
