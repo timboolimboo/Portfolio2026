@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.netlify
+*.md
+generated
+index.html
+ueber-mich.html
+arbeiten.html
+impressum.html
+fotografie.html
+meeresschutz.html
