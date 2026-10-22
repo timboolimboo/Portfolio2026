@@ -1,8 +1,9 @@
-name: Deploy preview
+name: Deploy GitHub Pages
 
 on:
   push:
     branches:
+      - main
       - preview
   workflow_dispatch:
 
